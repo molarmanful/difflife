@@ -1,38 +1,32 @@
 import opts from '../common/opts.js'
-
-let mod = (a, b) => ((a % b) + b) % b
+import { mod, range } from '../common/util.js'
 
 export class Life {
   constructor(n = opts.size) {
     this.n = n
-    this.grid = [...new Array(this.n)].map(() =>
-      [...new Array(this.n)].map(() => 0)
-    )
+    this.grid = [...Array(this.n)].map(() => Array(this.n).fill(0))
   }
 
-  at(i, j) {
-    return this.grid[mod(i, this.n)][mod(j, this.n)]
-  }
-
-  each(f) {
-    for (let i in this.grid) for (let j in this.grid[i]) f(+i, +j)
-  }
-
-  each$(f) {
-    return this.grid.map((x, i) => x.map((y, j) => f(y, i, j)))
-  }
-
-  sow(n = 0.5) {
+  sow(n = opts.bias) {
     this.each((i, j) => {
-      this.grid[i][j] = +(Math.random() < n)
+      this.set(i, j, +(Math.random() < n))
     })
+  }
+
+  sowR([x, y], r = opts.chaosR, n = opts.bias) {
+    x |= 0
+    y |= 0
+    let ns = range(-r, r + 1)
+    for (let a of ns)
+      for (let b of ns)
+        if (a * a + b * b <= r * r) this.set(y + a, x + b, +(Math.random() < n))
   }
 
   next() {
     this.grid = this.each$((x, i, j) => {
       let sum = 0
-      for (let a of [-1, 0, 1])
-        for (let b of [-1, 0, 1]) sum += this.at(i + a, j + b)
+      let ns = range(-1, 2)
+      for (let a of ns) for (let b of ns) sum += this.at(i + a, j + b)
       return (sum == 3) | ((sum == 4) & x)
     })
   }
@@ -51,5 +45,21 @@ export class Life {
     })
     if (n) o += c + String.fromCodePoint(n)
     return o
+  }
+
+  at(i, j) {
+    return this.grid[mod(i, this.n)][mod(j, this.n)]
+  }
+
+  set(i, j, x) {
+    this.grid[mod(i, this.n)][mod(j, this.n)] = +x
+  }
+
+  each(f) {
+    for (let i in this.grid) for (let j in this.grid[i]) f(+i, +j)
+  }
+
+  each$(f) {
+    return this.grid.map((x, i) => x.map((y, j) => f(y, i, j)))
   }
 }

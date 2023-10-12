@@ -4,6 +4,7 @@ import polka from 'polka'
 import { WebSocketServer } from 'ws'
 
 import { handler } from '../build/handler.js'
+import { msgParse } from '../common/util.js'
 
 import { Life } from './Life.js'
 
@@ -32,7 +33,12 @@ wss.on('connection', ws => {
   ws.on('error', console.error)
 
   ws.on('message', data => {
-    console.log('rcv:', data + '')
+    let [h, b] = msgParse(data + '')
+    switch (h) {
+      case 'C':
+        life.sowR(b.split` `)
+        break
+    }
   })
 })
 

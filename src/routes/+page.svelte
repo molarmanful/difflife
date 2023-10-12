@@ -9,6 +9,8 @@
   import { deRLE, msgParse } from '../../common/util.js'
 
   let canvas
+  let clk = false
+  let mouse = { x: 0, y: 0 }
 
   let cvclk = () => {}
 
@@ -25,9 +27,10 @@
 
     ws.onopen = () => {
       console.log('open')
-      cvclk = ({ clientX, clientY }) => {
+      cvclk = () => {
         let { left, top } = canvas.getBoundingClientRect()
-        ws.send(`C\n${clientX - left} ${clientY - top}`)
+        let { x, y } = mouse
+        ws.send(`C\n${(x - left) / opts.scale} ${(y - top) / opts.scale}`)
       }
     }
 
@@ -35,9 +38,9 @@
       let [h, b] = msgParse(data)
       switch (h) {
         case 'G':
-          console.log(deRLE(b))
           imgd.data.set(deRLE(b))
           ctx.putImageData(imgd, 0, 0)
+          if (clk) cvclk(mouse)
           break
       }
     }
@@ -52,12 +55,21 @@
   <title>DIFFLIFE</title>
 </svelte:head>
 
+<svelte:window
+  on:mousemove={({ clientX, clientY }) => {
+    mouse.x = clientX
+    mouse.y = clientY
+  }}
+  on:mouseup={() => (clk = false)}
+/>
+
 <main class="screen flex justify-center items-center">
   <canvas
-    class="border-(1 white) image-render-pixel"
     bind:this={canvas}
+    class="border-(1 white) image-render-pixel"
     height={opts.size}
     width={opts.size}
     on:click={cvclk}
+    on:mousedown={() => (clk = true)}
   />
 </main>

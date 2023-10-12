@@ -14,3 +14,7 @@ export const deRLE = s =>
   new Uint8ClampedArray(
     chunk(s, 2).flatMap(([a, b]) => Array(b.codePointAt(0) * 4).fill(+a * 255))
   )
+
+export const range = (a, b) => [...Array(b - a).keys()].map(x => x + a)
+
+export const mod = (a, b) => ((a % b) + b) % b
