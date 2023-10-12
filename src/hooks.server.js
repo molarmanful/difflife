@@ -7,7 +7,7 @@ let loaded = false
 const startWSS = () => {
   if (loaded) return
   const wss = globalThis[gwss]
-  console.log('[wss] setup')
+  console.log('[wss] start')
   if (!wss) return
 
   let life = new Life()
@@ -40,7 +40,7 @@ const startWSS = () => {
       ws.alive = false
       ws.ping()
     }
-  }, 30000)
+  }, 10000)
 
   let gol = setInterval(() => {
     life.next()
