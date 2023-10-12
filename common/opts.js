@@ -1,3 +1,4 @@
 export default {
-  size: 100,
+  size: 256,
+  scale: 2,
 }

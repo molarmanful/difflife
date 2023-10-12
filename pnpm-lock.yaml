@@ -32,6 +32,9 @@ dependencies:
   svelte:
     specifier: ^4.2.1
     version: 4.2.1
+  svelte-canvas:
+    specifier: ^1.0.1
+    version: 1.0.1
   unocss:
     specifier: ^0.55.7
     version: 0.55.7(postcss@8.4.31)(vite@4.4.11)
@@ -3207,6 +3210,12 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /svelte-canvas@1.0.1:
+    resolution: {integrity: sha512-PEsLnhghEWMS+9n5rkqo2wkmobQcVyieNJHMp/jRRVA4vo45DMKmMEwIreGAp/QVAiHt2V7VuZn6xMzZatdoHA==}
+    dependencies:
+      svelte: 4.2.1
+    dev: false
 
   /svelte-eslint-parser@0.33.1(svelte@4.2.1):
     resolution: {integrity: sha512-vo7xPGTlKBGdLH8T5L64FipvTrqv3OQRx9d2z5X05KKZDlF4rQk8KViZO4flKERY+5BiVdOh7zZ7JGJWo5P0uA==}
