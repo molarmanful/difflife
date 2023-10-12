@@ -1,13 +1,13 @@
-import { Life } from './lib/server/Life.js'
-
 import { building } from '$app/environment'
-import { gwss } from '$lib/server/index.js'
+import { gwss } from '$lib/server'
+import { Life } from '$lib/server/Life.js'
 import { msgParse } from '$lib/util.js'
 
 let loaded = false
 const startWSS = () => {
   if (loaded) return
   const wss = globalThis[gwss]
+  console.log('[wss] setup')
   if (!wss) return
 
   let life = new Life()
@@ -15,6 +15,7 @@ const startWSS = () => {
   life.sow()
 
   wss.on('connection', ws => {
+    console.log('[wss] +conn')
     ws.alive = true
 
     ws.on('pong', () => {
@@ -55,12 +56,13 @@ const startWSS = () => {
 }
 
 export const handle = async ({ event, resolve }) => {
+  console.log('[wss] handle')
   startWSS()
   if (!building) {
     let wss = globalThis[gwss]
     if (wss) event.locals.wss = wss
   }
   return await resolve(event, {
-    filterSerializedResponseHeaders: name => name === 'content-type',
+    filterSerializedResponseHeaders: name => name == 'content-type',
   })
 }
