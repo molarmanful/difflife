@@ -21,9 +21,4 @@ primary_region = "bos"
     interval = "30s"
     method = "GET"
     timeout = "5s"
-    path = "/"
-  
-  [[http_service.tcp_checks]]
-    grace_period = "3s"
-    interval = "30s"
-    timeout = "5s"
+    path = "/ws"
