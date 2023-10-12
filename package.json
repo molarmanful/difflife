@@ -1,12 +1,11 @@
 {
-	"name": "difflife",
+	"name": "rorschach",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"start": "vite build && node server",
-		"preview": "vite preview",
+		"start": "node server",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
@@ -25,6 +24,7 @@
 		"ws": "^8.14.2"
 	},
 	"devDependencies": {
+		"@flydotio/dockerfile": "^0.4.10",
 		"@types/react": "^18.2.28",
 		"@types/react-dom": "^18.2.13",
 		"eslint": "^8.51.0",

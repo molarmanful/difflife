@@ -55,7 +55,7 @@
 </script>
 
 <svelte:head>
-  <title>DIFFLIFE</title>
+  <title>RORSCHACH</title>
 </svelte:head>
 
 <svelte:window
