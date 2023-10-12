@@ -5,8 +5,8 @@
 
   import { onMount } from 'svelte'
 
-  import opts from '../../common/opts.js'
-  import { deRLE, msgParse } from '../../common/util.js'
+  import opts from '$lib/opts.js'
+  import { deRLE, msgParse } from '$lib/util.js'
 
   let canvas
   let clk = false
@@ -25,7 +25,7 @@
     loaded = true
 
     let ws = new WebSocket(
-      `${location.protocol == 'https:' ? 'wss' : 'ws'}://${location.host}`
+      `${location.protocol == 'https:' ? 'wss' : 'ws'}://${location.host}/ws`
     )
 
     ws.onopen = () => {

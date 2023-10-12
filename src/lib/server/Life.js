@@ -1,5 +1,5 @@
-import opts from '../common/opts.js'
-import { mod, range } from '../common/util.js'
+import opts from '../opts.js'
+import { mod, range } from '../util.js'
 
 export class Life {
   constructor(n = opts.size) {
