@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"start": "vite build && node server",
 		"preview": "vite preview",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write ."
@@ -17,6 +18,7 @@
 		"polka": "^0.5.2",
 		"postcss": "^8.4.31",
 		"postcss-nesting": "^12.0.1",
+		"redis": "^4.6.10",
 		"svelte": "^4.2.1",
 		"unocss": "^0.55.7",
 		"vite": "^4.4.11",

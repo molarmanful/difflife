@@ -3,28 +3,53 @@ import { createServer } from 'http'
 import polka from 'polka'
 import { WebSocketServer } from 'ws'
 
-import { handler } from '../build/handler'
+import { handler } from '../build/handler.js'
+
+import { Life } from './Life.js'
 
 let { PORT = 3000 } = process.env
 let server = createServer()
 
 polka({ server })
-  .get('/ws', (req, res) => {
-    console.log('ws')
-  })
   .use(handler)
   .listen(PORT, () => {
     console.log(`port: ${PORT}`)
   })
 
-const wss = new WebSocketServer({ server })
+let wss = new WebSocketServer({ server })
 
-wss.on('connection', function connection(ws) {
-  ws.on('error', console.error)
+let life = new Life()
+// TODO: link db
+life.sow()
 
-  ws.on('message', function message(data) {
-    console.log('received: %s', data)
+wss.on('connection', ws => {
+  ws.alive = true
+
+  ws.on('pong', () => {
+    ws.alive = true
   })
 
-  ws.send('something')
+  ws.on('error', console.error)
+
+  ws.on('message', data => {
+    console.log('rcv:', data + '')
+  })
+})
+
+let ping = setInterval(() => {
+  for (let ws of wss.clients) {
+    if (!ws.alive) ws.terminate()
+    ws.alive = false
+    ws.ping()
+  }
+}, 30000)
+
+let gol = setInterval(() => {
+  life.next()
+  for (let ws of wss.clients) ws.send('G\n' + life.rle())
+}, 50)
+
+wss.on('close', () => {
+  clearInterval(ping)
+  clearInterval(gol)
 })
