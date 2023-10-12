@@ -11,6 +11,7 @@
   let canvas
   let clk = false
   let mouse = { x: 0, y: 0 }
+  let loaded = false
 
   let cvclk = () => {}
 
@@ -20,6 +21,8 @@
     ctx.imageSmoothingEnabled = false
 
     let imgd = ctx.createImageData(opts.size, opts.size)
+
+    loaded = true
 
     let ws = new WebSocket(
       `${location.protocol == 'https:' ? 'wss' : 'ws'}://${location.host}`
@@ -63,7 +66,11 @@
   on:mouseup={() => (clk = false)}
 />
 
-<main class="screen flex justify-center items-center">
+<main
+  class="{loaded
+    ? 'opacity-100'
+    : 'opacity-0'} transition-opacity-400 screen flex justify-center items-center"
+>
   <canvas
     bind:this={canvas}
     class="border-(1 white) image-render-pixel"
