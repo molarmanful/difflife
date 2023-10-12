@@ -56,7 +56,6 @@ const startWSS = () => {
 }
 
 export const handle = async ({ event, resolve }) => {
-  console.log('[wss] handle')
   startWSS()
   if (!building) {
     let wss = globalThis[gwss]
