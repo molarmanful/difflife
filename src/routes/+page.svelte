@@ -41,7 +41,7 @@
       let [h, b] = msgParse(data)
       switch (h) {
         case 'G':
-          imgd.data.set(deRLE(b))
+          imgd.data.set(new Uint8ClampedArray(deRLE(b)))
           ctx.putImageData(imgd, 0, 0)
           if (clk) cvclk(mouse)
           break
