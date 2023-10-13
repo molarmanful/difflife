@@ -18,11 +18,14 @@ const startWSS = async () => {
   let client = createClient(process.env.REDIS_URL)
   client.on('error', console.error)
   await client.connect()
+  console.log('[wss] +db')
 
   let life = new Life()
   let grid = await client.get('grid')
-  if (grid) life.grid = degrid(grid, life.grid.n)
-  else life.sow()
+  if (grid) {
+    console.log('[wss] db -> grid')
+    life.grid = degrid(grid, life.grid.n)
+  } else life.sow()
 
   wss.on('connection', ws => {
     ws.id = nanoid()
@@ -72,7 +75,7 @@ const startWSS = async () => {
     wr = false
     await client.set('grid', life.rle())
     wr = true
-    console.log('[wss] db write')
+    console.log('[wss] grid -> db')
   }, opts.dbwrite)
 
   let loop = true
