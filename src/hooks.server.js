@@ -15,6 +15,7 @@ const startWSS = async () => {
   console.log('[wss] start')
   if (!wss) return
 
+  console.log(process.env.REDIS_URL)
   let client = createClient(process.env.REDIS_URL)
   client.on('error', console.error)
   await client.connect()
