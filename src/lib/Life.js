@@ -1,7 +1,7 @@
-import opts from '../opts.js'
-import { mod, range } from '../util.js'
+import opts from '$lib/opts.js'
+import { mod, range } from '$lib/util.js'
 
-export class Life {
+export default class {
   constructor(n = opts.size) {
     this.n = n
     this.grid = [...Array(this.n)].map(() => Array(this.n).fill(0))
@@ -13,7 +13,7 @@ export class Life {
     })
   }
 
-  sowR([x, y], r = opts.chaosR, n = opts.bias) {
+  sowR([x, y], r, n = opts.bias) {
     x |= 0
     y |= 0
     let ns = range(-r, r + 1)
@@ -48,11 +48,11 @@ export class Life {
   }
 
   at(i, j) {
-    return this.grid[mod(i, this.n)][mod(j, this.n)]
+    return this.grid[mod(~~i, this.n)][mod(~~j, this.n)]
   }
 
   set(i, j, x) {
-    this.grid[mod(i, this.n)][mod(j, this.n)] = +x
+    this.grid[mod(~~i, this.n)][mod(~~j, this.n)] = +x
   }
 
   each(f) {

@@ -1,6 +1,10 @@
+import { nanoid } from 'nanoid'
+
 import { building } from '$app/environment'
+import Life from '$lib/Life.js'
+import opts from '$lib/opts.js'
+import Player, { ss } from '$lib/Player.js'
 import { gwss } from '$lib/server'
-import { Life } from '$lib/server/Life.js'
 import { msgParse } from '$lib/util.js'
 
 let loaded = false
@@ -15,8 +19,11 @@ const startWSS = () => {
   life.sow()
 
   wss.on('connection', ws => {
-    console.log('[wss] +conn')
+    ws.id = nanoid()
     ws.alive = true
+    ws.player = new Player()
+
+    console.log('[wss] +conn', ws.id)
 
     ws.on('pong', () => {
       ws.alive = true
@@ -27,8 +34,16 @@ const startWSS = () => {
     ws.on('message', data => {
       let [h, b] = msgParse(data + '')
       switch (h) {
+        case 'UC':
+          ws.player.UC()
+          break
         case 'C':
-          life.sowR(b.split` `)
+          ws.player.C(() =>
+            life.sowR(
+              b.split` `.map(x => +x),
+              ws.player.h
+            )
+          )
           break
       }
     })
@@ -36,7 +51,10 @@ const startWSS = () => {
 
   let ping = setInterval(() => {
     for (let ws of wss.clients) {
-      if (!ws.alive) ws.terminate()
+      if (!ws.alive) {
+        ws.terminate()
+        console.log('[wss] -conn', ws.id)
+      }
       ws.alive = false
       ws.ping()
     }
@@ -44,8 +62,13 @@ const startWSS = () => {
 
   let gol = setInterval(() => {
     life.next()
-    for (let ws of wss.clients) ws.send('G\n' + life.rle())
-  }, 50)
+    for (let ws of wss.clients) {
+      ws.player.heal()
+      ws.send('G\n' + life.rle())
+      if (ws.player.s != ss.idle) ws.send('H\n' + ws.player.h)
+      ws.send('X')
+    }
+  }, opts.ms)
 
   wss.on('close', () => {
     clearInterval(ping)
