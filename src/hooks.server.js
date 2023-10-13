@@ -1,22 +1,28 @@
 import { nanoid } from 'nanoid'
+import { createClient } from 'redis'
 
 import { building } from '$app/environment'
 import Life from '$lib/Life.js'
 import opts from '$lib/opts.js'
 import Player, { ss } from '$lib/Player.js'
 import { gwss } from '$lib/server'
-import { msgParse } from '$lib/util.js'
+import { degrid, msgParse } from '$lib/util.js'
 
 let loaded = false
-const startWSS = () => {
+const startWSS = async () => {
   if (loaded) return
   const wss = globalThis[gwss]
   console.log('[wss] start')
   if (!wss) return
 
+  let client = createClient(process.env.REDIS_URL)
+  client.on('error', console.error)
+  await client.connect()
+
   let life = new Life()
-  // TODO: link db
-  life.sow()
+  let grid = await client.get('grid')
+  if (grid) life.grid = degrid(grid, life.grid.n)
+  else life.sow()
 
   wss.on('connection', ws => {
     ws.id = nanoid()
@@ -60,6 +66,15 @@ const startWSS = () => {
     }
   }, 10000)
 
+  let wr = true
+  let dbwrite = setInterval(async () => {
+    if (!wr) return
+    wr = false
+    await client.set('grid', life.rle())
+    wr = true
+    console.log('[wss] db write')
+  }, opts.dbwrite)
+
   let loop = true
   let gol = () => {
     const a = Date.now()
@@ -77,6 +92,7 @@ const startWSS = () => {
 
   wss.on('close', () => {
     clearInterval(ping)
+    clearInterval(dbwrite)
     loop = false
   })
 
@@ -84,7 +100,7 @@ const startWSS = () => {
 }
 
 export const handle = async ({ event, resolve }) => {
-  startWSS()
+  await startWSS()
   if (!building) {
     let wss = globalThis[gwss]
     if (wss) event.locals.wss = wss

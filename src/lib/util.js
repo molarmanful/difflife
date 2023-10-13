@@ -13,6 +13,8 @@ export const chunk = (s, n) => {
 export const deRLE = s =>
   chunk(s, 2).flatMap(([a, b]) => Array(b.codePointAt(0) * 4).fill(+a * 255))
 
+export const degrid = (s, n) => chunk(deRLE(s), n)
+
 export const range = (a, b) => [...Array(b - a).keys()].map(x => x + a)
 
 export const mod = (a, b) => ((a % b) + b) % b

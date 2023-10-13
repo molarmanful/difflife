@@ -6,4 +6,5 @@ export default {
   health: 10,
   decay: 1,
   regen: 0.5,
+  dbwrite: 1000,
 }
