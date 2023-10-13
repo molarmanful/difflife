@@ -34,8 +34,6 @@
     ws.onopen = () => {
       console.log('open')
 
-      ws.send(0)
-
       cvclk = () => {
         let { left, top } = canvas.getBoundingClientRect()
         let { x, y } = mouse
