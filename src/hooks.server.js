@@ -16,7 +16,7 @@ const startWSS = async () => {
   if (!wss) return
 
   console.log(process.env.REDIS_URL)
-  let client = createClient(process.env.REDIS_URL)
+  let client = createClient(process.env.REDIS_URL, { socket: { family: 6 } })
   client.on('error', console.error)
   await client.connect()
   console.log('[wss] +db')
