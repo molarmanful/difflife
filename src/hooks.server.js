@@ -60,7 +60,9 @@ const startWSS = () => {
     }
   }, 10000)
 
-  let gol = setInterval(() => {
+  let loop = true
+  let gol = () => {
+    const a = Date.now()
     life.next()
     for (let ws of wss.clients) {
       ws.player.heal()
@@ -68,11 +70,14 @@ const startWSS = () => {
       if (ws.player.s != ss.idle) ws.send('H\n' + ws.player.h)
       ws.send('X')
     }
-  }, opts.ms)
+    const b = Date.now()
+    if (loop) setTimeout(gol, opts.ms - b + a)
+  }
+  gol()
 
   wss.on('close', () => {
     clearInterval(ping)
-    clearInterval(gol)
+    loop = false
   })
 
   loaded = true
