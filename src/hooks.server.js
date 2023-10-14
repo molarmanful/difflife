@@ -25,7 +25,7 @@ const startWSS = async () => {
 
   let life = new Life()
   let grid = await client.get('grid')
-  if (grid) {
+  if (grid && grid[0] == '\0') {
     console.log('[wss] db -> grid')
     life.grid = Life.desparse(grid)
   } else life.sow()
@@ -78,7 +78,6 @@ const startWSS = async () => {
     wr = false
     await client.set('grid', life.sparse())
     wr = true
-    console.log('[wss] grid -> db')
   }, opts.dbwrite)
 
   let loop = true
