@@ -6,7 +6,7 @@ import Life from '$lib/Life.js'
 import opts from '$lib/opts.js'
 import Player, { ss } from '$lib/Player.js'
 import { gwss } from '$lib/server'
-import { degrid, msgParse } from '$lib/util.js'
+import { msgParse } from '$lib/util.js'
 
 let loaded = false
 const startWSS = async () => {
@@ -27,7 +27,7 @@ const startWSS = async () => {
   let grid = await client.get('grid')
   if (grid) {
     console.log('[wss] db -> grid')
-    life.grid = degrid(grid, life.n)
+    life.grid = Life.desparse(grid)
   } else life.sow()
 
   wss.on('connection', ws => {
@@ -76,7 +76,7 @@ const startWSS = async () => {
   let dbwrite = setInterval(async () => {
     if (!wr) return
     wr = false
-    await client.set('grid', life.rle())
+    await client.set('grid', life.sparse())
     wr = true
     console.log('[wss] grid -> db')
   }, opts.dbwrite)
@@ -87,7 +87,7 @@ const startWSS = async () => {
     life.next()
     for (let ws of wss.clients) {
       ws.player.heal()
-      ws.send('G\n' + life.rle())
+      ws.send('G\n' + life.sparse())
       if (ws.player.s != ss.idle) ws.send('H\n' + ws.player.h)
       ws.send('X')
     }

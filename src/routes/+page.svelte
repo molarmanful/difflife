@@ -5,8 +5,9 @@
 
   import { onMount } from 'svelte'
 
+  import Life from '$lib/Life.js'
   import opts from '$lib/opts.js'
-  import { deRLE, msgParse } from '$lib/util.js'
+  import { msgParse } from '$lib/util.js'
 
   let canvas
   let clk = false
@@ -45,7 +46,7 @@
       let [h, b] = msgParse(data)
       switch (h) {
         case 'G':
-          imgd.data.set(new Uint8ClampedArray(deRLE(b)))
+          imgd.data.set(new Uint8ClampedArray(Life.dePx(b)))
           ctx.putImageData(imgd, 0, 0)
           break
         case 'H':

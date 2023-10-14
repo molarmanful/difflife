@@ -31,20 +31,30 @@ export default class {
     })
   }
 
-  rle() {
-    let c = 0
-    let n = 0
-    let o = ''
-    this.each$(x => {
-      if (x == c) n++
-      else {
-        if (n) o += c + String.fromCodePoint(n)
-        c = x
-        n = 1
-      }
-    })
-    if (n) o += c + String.fromCodePoint(n)
-    return o
+  sparse() {
+    return this.grid.map(
+      (x, i) =>
+        String.fromCodePoint(i) +
+        x.map((y, j) => (y ? String.fromCodePoint(j) : '')).join``
+    ).join`▵`
+  }
+
+  static desparse(s) {
+    let a = s.split`▵`
+    let n = a.length
+    let g = [...Array(n)].map(() => Array(n).fill(0))
+    for (let i in a) {
+      let [x, ...t] = a[i]
+      let xc = x.codePointAt(0)
+      for (let j of t) g[xc][j.codePointAt(0)] = 1
+    }
+    return g
+  }
+
+  static dePx(s) {
+    return this.desparse(s)
+      .flat()
+      .flatMap(x => Array(4).fill(x * 256))
   }
 
   at(i, j) {
