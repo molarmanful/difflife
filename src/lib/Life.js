@@ -54,7 +54,7 @@ export default class {
   static dePx(s) {
     return this.desparse(s)
       .flat()
-      .flatMap(x => Array(4).fill(x * 256))
+      .flatMap(x => Array(3).fill(x * 255))
   }
 
   at(i, j) {

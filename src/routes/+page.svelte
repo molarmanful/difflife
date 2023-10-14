@@ -4,7 +4,9 @@
   import '../app.postcss'
 
   import { onMount } from 'svelte'
+  import * as twgl from 'twgl.js'
 
+  import Draw from '$lib/Draw.js'
   import Life from '$lib/Life.js'
   import opts from '$lib/opts.js'
   import { msgParse } from '$lib/util.js'
@@ -23,11 +25,9 @@
 
   onMount(() => {
     canvas.style.width = canvas.style.height = `${opts.size * opts.scale}px`
-    let ctx = canvas.getContext('2d')
-    ctx.imageSmoothingEnabled = false
+    let gl = canvas.getContext('webgl')
 
-    let imgd = ctx.createImageData(opts.size, opts.size)
-    let ua = new Uint8ClampedArray(opts.size * opts.size * 4)
+    let draw = new Draw(gl)
 
     ws = new WebSocket(
       `${location.protocol == 'https:' ? 'wss' : 'ws'}://${location.host}/ws`
@@ -47,14 +47,14 @@
       let [h, b] = msgParse(data)
       switch (h) {
         case 'G':
-          ua.set(Life.dePx(b))
-          imgd.data.set(ua)
-          ctx.putImageData(imgd, 0, 0)
+          draw.draw(Life.dePx(b))
           break
+
         case 'H':
           health = +b
           cursor = health <= 0 ? 'cursor-none' : 'cursor-pointer'
           break
+
         case 'X':
           if (unclk) {
             ws.send('UC')
