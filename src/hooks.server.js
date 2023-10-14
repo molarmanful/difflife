@@ -27,7 +27,7 @@ const startWSS = async () => {
   let grid = await client.get('grid')
   if (grid) {
     console.log('[wss] db -> grid')
-    life.grid = degrid(grid, life.grid.n)
+    life.grid = degrid(grid, life.n)
   } else life.sow()
 
   wss.on('connection', ws => {
