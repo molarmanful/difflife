@@ -27,6 +27,7 @@
     ctx.imageSmoothingEnabled = false
 
     let imgd = ctx.createImageData(opts.size, opts.size)
+    let ua = new Uint8ClampedArray(opts.size * opts.size * 4)
 
     ws = new WebSocket(
       `${location.protocol == 'https:' ? 'wss' : 'ws'}://${location.host}/ws`
@@ -46,7 +47,8 @@
       let [h, b] = msgParse(data)
       switch (h) {
         case 'G':
-          imgd.data.set(new Uint8ClampedArray(Life.dePx(b)))
+          ua.set(Life.dePx(b))
+          imgd.data.set(ua)
           ctx.putImageData(imgd, 0, 0)
           break
         case 'H':
