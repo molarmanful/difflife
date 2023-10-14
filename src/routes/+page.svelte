@@ -4,7 +4,6 @@
   import '../app.postcss'
 
   import { onMount } from 'svelte'
-  import * as twgl from 'twgl.js'
 
   import Draw from '$lib/Draw.js'
   import Life from '$lib/Life.js'

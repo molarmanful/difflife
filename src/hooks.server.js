@@ -75,6 +75,7 @@ const startWSS = async () => {
   let wr = true
   let dbwrite = setInterval(async () => {
     if (!wr) return
+    if (!wss.clients.size) return
     wr = false
     await client.set('grid', life.sparse())
     wr = true
@@ -82,6 +83,7 @@ const startWSS = async () => {
 
   let loop = true
   let gol = () => {
+    if (!wss.clients.size) return
     const a = Date.now()
     life.next()
     for (let ws of wss.clients) {
