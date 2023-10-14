@@ -83,14 +83,15 @@ const startWSS = async () => {
 
   let loop = true
   let gol = () => {
-    if (!wss.clients.size) return
     const a = Date.now()
-    life.next()
-    for (let ws of wss.clients) {
-      ws.player.heal()
-      ws.send('G\n' + life.sparse())
-      if (ws.player.s != ss.idle) ws.send('H\n' + ws.player.h)
-      ws.send('X')
+    if (wss.clients.size) {
+      life.next()
+      for (let ws of wss.clients) {
+        ws.player.heal()
+        ws.send('G\n' + life.sparse())
+        if (ws.player.s != ss.idle) ws.send('H\n' + ws.player.h)
+        ws.send('X')
+      }
     }
     const b = Date.now()
     if (loop) setTimeout(gol, opts.ms - b + a)
