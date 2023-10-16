@@ -127,7 +127,7 @@ const startWSS = async () => {
               image: 'data:image/png;base64,' + img,
               prompt:
                 'Interpret the real-world object in a few words (max 10). Say only the object. Be metaphorical and abstract.',
-              temperature: 0.8,
+              temperature: 0.69,
             },
           }),
         }
