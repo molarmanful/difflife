@@ -98,6 +98,15 @@ const startWSS = async () => {
   }
   gol()
 
+  // let gen = async () => {
+  //   const a = Date.now()
+  //   if (wss.clients.size) {
+  //   }
+  //   const b = Date.now()
+  //   if (loop) setTimeout(gol, opts.ms - b + a)
+  // }
+  // gen()
+
   wss.on('close', () => {
     clearInterval(ping)
     clearInterval(dbwrite)
