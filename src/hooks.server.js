@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid'
 import { createClient } from 'redis'
+import sharp from 'sharp'
 
 import { building } from '$app/environment'
 import Life from '$lib/Life.js'
@@ -98,14 +99,46 @@ const startWSS = async () => {
   }
   gol()
 
-  // let gen = async () => {
-  //   const a = Date.now()
-  //   if (wss.clients.size) {
-  //   }
-  //   const b = Date.now()
-  //   if (loop) setTimeout(gol, opts.ms - b + a)
-  // }
-  // gen()
+  let gen = async () => {
+    const a = Date.now()
+    if (wss.clients.size) {
+      let img = await sharp(life.toUi8(), {
+        raw: {
+          width: opts.size,
+          height: opts.size,
+          channels: 3,
+        },
+      })
+        .gif()
+        .toBuffer()
+      img = img.toString('base64')
+      console.log('req')
+      let req = await fetch(
+        'https://replicate-api-proxy.glitch.me/create_n_get',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            version:
+              '6bc1c7bb0d2a34e413301fee8f7cc728d2d4e75bfab186aa995f63292bda92fc',
+            input: {
+              image_path: 'data:image/png;base64,' + img,
+              prompt:
+                'Interpret the image in as few words as possible (i.e. less than 10). Be abstract and metaphorical.',
+              temperature: 0.8,
+            },
+          }),
+        }
+      )
+      console.log(req)
+    }
+    const b = Date.now()
+    if (loop) setTimeout(gen, opts.gen_ms - b + a)
+  }
+  gen()
 
   wss.on('close', () => {
     clearInterval(ping)

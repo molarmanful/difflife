@@ -57,6 +57,12 @@ export default class {
       .flatMap(x => Array(3).fill(x * 255))
   }
 
+  toUi8() {
+    return Uint8ClampedArray.from(
+      this.grid.flat().flatMap(x => Array(3).fill(x * 255))
+    )
+  }
+
   at(i, j) {
     return this.grid[mod(~~i, this.n)][mod(~~j, this.n)]
   }
