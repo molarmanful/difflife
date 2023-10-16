@@ -119,7 +119,6 @@ const startWSS = async () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
           },
           body: JSON.stringify({
             version:
@@ -133,6 +132,7 @@ const startWSS = async () => {
           }),
         }
       )
+      req = await req.json()
       console.log(req)
     }
     const b = Date.now()
