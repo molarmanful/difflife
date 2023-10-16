@@ -52,15 +52,15 @@ export default class {
   }
 
   static dePx(s) {
-    return this.desparse(s)
-      .flat()
-      .flatMap(x => Array(3).fill(x * 255))
+    return this.toPx(this.desparse(s))
+  }
+
+  static toPx(g) {
+    return g.flat().flatMap(x => Array(3).fill(!x * 255))
   }
 
   toUi8() {
-    return Uint8ClampedArray.from(
-      this.grid.flat().flatMap(x => Array(3).fill(x * 255))
-    )
+    return Uint8ClampedArray.from(this.constructor.toPx(this.grid))
   }
 
   at(i, j) {

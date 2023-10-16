@@ -31,12 +31,17 @@ const startWSS = async () => {
     life.grid = Life.desparse(grid)
   } else life.sow()
 
+  let interp = (await client.get('interp')) || '...'
+  console.log('[wss] db -> interp :', interp)
+
   wss.on('connection', ws => {
     ws.id = nanoid()
     ws.alive = true
     ws.player = new Player()
 
     console.log('[wss] +conn', ws.id)
+
+    if (interp) ws.send('T\n' + interp)
 
     ws.on('pong', () => {
       ws.alive = true
@@ -112,7 +117,7 @@ const startWSS = async () => {
         .gif()
         .toBuffer()
       img = img.toString('base64')
-      console.log('req')
+      console.log('[wss] req interp')
       let req = await fetch(
         'https://replicate-api-proxy.glitch.me/create_n_get',
         {
@@ -126,14 +131,17 @@ const startWSS = async () => {
             input: {
               image: 'data:image/png;base64,' + img,
               prompt:
-                'Interpret the real-world object in a few words (max 10). Say only the object. Be metaphorical and abstract.',
+                'Interpret the real-world object depicted. Say only the object, avoid sentences. Be as metaphorical, abstract, sarcastic, witty, humorous, and obscure as possible. Focus primarily on shape/form rather than color. Avoid being literal.',
               temperature: 0.69,
             },
           }),
         }
       )
-      req = await req.json()
-      console.log(req)
+      let { output } = await req.json()
+      interp = output.join``.toUpperCase().replace(/ +/g, ' ')
+      await client.set('interp', interp)
+      console.log('[wss] interp :', interp)
+      for (let ws of wss.clients) ws.send('T\n' + interp)
     }
     const b = Date.now()
     if (loop) setTimeout(gen, opts.gen_ms - b + a)

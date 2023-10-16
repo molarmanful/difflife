@@ -17,6 +17,7 @@
   let loaded = false
   let cursor = 'cursor-pointer'
   let health = opts.health
+  let interp = ''
   $: hbar = '#'.repeat(~~health) + '*'.repeat(Math.ceil(health % 1))
   let ws
 
@@ -60,6 +61,10 @@
             unclk = false
           } else if (clk) cvclk(mouse)
           break
+
+        case 'T':
+          interp = b
+          break
       }
     }
 
@@ -91,16 +96,20 @@
     ? 'opacity-100'
     : 'opacity-0'} transition-opacity-400 screen flex justify-center items-center"
 >
-  <div class="flex flex-col">
-    <div class="flex mb-2">
-      <span>{hbar + '·'.repeat(opts.health - hbar.length)}</span>
-    </div>
+  <div
+    style:max-width="{opts.size * 1.2 * opts.scale}px"
+    class="flex-(~ col) items-center"
+  >
+    <div class="mb-2">{hbar + '·'.repeat(opts.health - hbar.length)}</div>
     <canvas
       bind:this={canvas}
-      class="border-(1 white) image-render-pixel {cursor}"
+      class="border-(1 black) image-render-pixel {cursor}"
       height={opts.size}
       width={opts.size}
       on:mousedown={() => (clk = true)}
     />
+    <div class="mt-2 text-center hyphens-auto">
+      <p>{interp}</p>
+    </div>
   </div>
 </main>
