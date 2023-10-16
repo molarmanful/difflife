@@ -124,9 +124,9 @@ const startWSS = async () => {
             version:
               '6bc1c7bb0d2a34e413301fee8f7cc728d2d4e75bfab186aa995f63292bda92fc',
             input: {
-              image_path: 'data:image/png;base64,' + img,
+              image: 'data:image/png;base64,' + img,
               prompt:
-                'Interpret the image in as few words as possible (i.e. less than 10). Be abstract and metaphorical.',
+                'Interpret the real-world object in a few words (max 10). Say only the object. Be metaphorical and abstract.',
               temperature: 0.8,
             },
           }),
