@@ -97,10 +97,14 @@
     : 'opacity-0'} transition-opacity-400 screen flex justify-center items-center"
 >
   <div
-    style:max-width="{opts.size * 1.2 * opts.scale}px"
-    class="flex-(~ col) items-center"
+    style:max-width="{opts.size * opts.scale}px"
+    class="h-full flex-(~ col) items-center"
   >
-    <div class="mb-2">{hbar + '·'.repeat(opts.health - hbar.length)}</div>
+    <div class="flex-(~ 1) flex-col mb-4">
+      <span class="mt-auto">
+        {hbar + '·'.repeat(opts.health - hbar.length)}
+      </span>
+    </div>
     <canvas
       bind:this={canvas}
       class="border-(1 black) image-render-pixel {cursor}"
@@ -108,7 +112,7 @@
       width={opts.size}
       on:mousedown={() => (clk = true)}
     />
-    <div class="mt-2 text-center hyphens-auto">
+    <div class="mt-4 mb-16 hyphens-auto flex-1">
       <p>{interp}</p>
     </div>
   </div>

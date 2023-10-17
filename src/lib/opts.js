@@ -4,7 +4,7 @@ export default {
   bias: 0.5,
   ms: 50,
   gen_ms: 10000,
-  health: 10,
+  health: 12,
   decay: 1,
   regen: 0.5,
   dbwrite: 1000,

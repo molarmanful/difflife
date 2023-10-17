@@ -127,18 +127,23 @@ const startWSS = async () => {
           },
           body: JSON.stringify({
             version:
-              '6bc1c7bb0d2a34e413301fee8f7cc728d2d4e75bfab186aa995f63292bda92fc',
+              'b96a2f33cc8e4b0aa23eacfce731b9c41a7d9466d9ed4e167375587b54db9423',
             input: {
               image: 'data:image/png;base64,' + img,
+              top_p: 1,
               prompt:
-                'Interpret the real-world object depicted. Say only the object, avoid sentences. Be as metaphorical, abstract, sarcastic, witty, humorous, and obscure as possible. Focus primarily on shape/form rather than color. Avoid being literal.',
-              temperature: 0.69,
+                'Interpret the image. Say only the object alongside its descriptors; avoid sentences or paragraphs at all costs. Be as metaphorical, abstract, sarcastic, witty, humorous, sentimental, or cryptic as possible. Focus primarily on shape/form rather than color. Avoid being literal.',
+              num_beams: 5,
+              max_length: 4000,
+              temperature: 1.69,
+              max_new_tokens: 3000,
+              repetition_penalty: 2,
             },
           }),
         }
       )
       let { output } = await req.json()
-      interp = output.join``.toUpperCase().replace(/ +/g, ' ')
+      interp = output
       await client.set('interp', interp)
       console.log('[wss] interp :', interp)
       for (let ws of wss.clients) ws.send('T\n' + interp)
