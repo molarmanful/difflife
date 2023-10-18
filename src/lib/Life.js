@@ -27,7 +27,7 @@ export default class {
       let sum = 0
       let ns = range(-1, 2)
       for (let a of ns) for (let b of ns) sum += this.at(i + a, j + b)
-      return (sum == 3) | ((sum == 4) & x)
+      return (sum == 3) | ((sum == 4) & x) | ((sum == 6) & !x)
     })
   }
 
