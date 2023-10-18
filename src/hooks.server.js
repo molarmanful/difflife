@@ -137,11 +137,11 @@ const startWSS = async () => {
                   'What thing do you see? ' +
                   'Begin your response with "I see...".' +
                   'Be as metaphorical, abstract, sarcastic, witty, humorous, sentimental, or cryptic as possible. ' +
-                  'Focus primarily on the shape/form of the thing. ' +
-                  'Do NOT talk about dots, pixels, or lines.',
+                  'Focus primarily on the physical form of the thing. ' +
+                  'NOT dots, pixels, or lines.',
                 num_beams: 5,
                 max_length: 4000,
-                temperature: 1.69,
+                temperature: 2,
                 max_new_tokens: 3000,
                 repetition_penalty: 2,
               },
