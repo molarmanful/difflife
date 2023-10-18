@@ -134,11 +134,9 @@ const startWSS = async () => {
                 image: 'data:image/png;base64,' + img,
                 top_p: 1,
                 prompt:
-                  'What thing do you see? ' +
+                  'What thing (NOT dots) do you see?' +
                   'Begin your response with "I see...".' +
-                  'Be as metaphorical, abstract, sarcastic, witty, humorous, sentimental, or cryptic as possible. ' +
-                  'Focus primarily on the physical form of the thing. ' +
-                  'NOT dots, pixels, or lines.',
+                  'Be as metaphorical, abstract, sarcastic, witty, humorous, sentimental, philosophical, or cryptic as possible.',
                 num_beams: 5,
                 max_length: 4000,
                 temperature: 2,
