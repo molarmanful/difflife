@@ -134,7 +134,7 @@ const startWSS = async () => {
                 image: 'data:image/png;base64,' + img,
                 top_p: 1,
                 prompt:
-                  'Interpret the image. Say only the object alongside its descriptors; avoid sentences or paragraphs. Be as metaphorical, abstract, sarcastic, witty, humorous, sentimental, or cryptic as possible. Focus primarily on the shape/form of the object. Avoid being literal.',
+                  'What do you see? Interpret only the object alongside its descriptors; avoid sentences or paragraphs. Be as metaphorical, abstract, sarcastic, witty, humorous, sentimental, or cryptic as possible. Focus primarily on the shape/form of the object. Avoid being literal.',
                 num_beams: 5,
                 max_length: 4000,
                 temperature: 1.69,
