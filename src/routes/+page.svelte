@@ -6,6 +6,7 @@
   import { onMount } from 'svelte'
 
   import Draw from '$lib/Draw.js'
+  import lev from '$lib/lev.js'
   import Life from '$lib/Life.js'
   import opts from '$lib/opts.js'
   import { msgParse } from '$lib/util.js'
@@ -22,6 +23,14 @@
   let ws
 
   let cvclk = () => {}
+
+  let steps = []
+  let lnxt = () => {
+    if (steps.length) {
+      interp = steps.pop()
+      setTimeout(lnxt)
+    }
+  }
 
   onMount(() => {
     canvas.style.width = canvas.style.height = `${opts.size * opts.scale}px`
@@ -62,8 +71,13 @@
           } else if (clk) cvclk(mouse)
           break
 
+        case '?':
+          interp += '\n\n[ANALYZING...]'
+          break
+
         case 'T':
-          interp = b
+          steps = lev(interp, b)
+          lnxt()
           break
       }
     }
@@ -113,7 +127,7 @@
       on:mousedown={() => (clk = true)}
     />
     <div class="mt-4 mb-16 hyphens-auto flex-1">
-      <p>{interp}</p>
+      <p class="ws-pre-wrap">{interp}</p>
     </div>
   </div>
 </main>

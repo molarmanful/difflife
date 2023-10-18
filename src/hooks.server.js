@@ -118,6 +118,7 @@ const startWSS = async () => {
         .toBuffer()
       img = img.toString('base64')
       console.log('[wss] req interp')
+      for (let ws of wss.clients) ws.send('?')
       try {
         let req = await fetch(
           'https://replicate-api-proxy.glitch.me/create_n_get',
@@ -134,9 +135,10 @@ const startWSS = async () => {
                 image: 'data:image/png;base64,' + img,
                 top_p: 1,
                 prompt:
-                  'What thing (NOT dots) do you see?' +
+                  'What thing do you see?' +
                   'Begin your response with "I see...".' +
-                  'Be as metaphorical, abstract, sarcastic, witty, humorous, sentimental, philosophical, or cryptic as possible.',
+                  'Be creative, metaphorical, abstract, witty, humorous, sentimental, philosophical, and cryptic. ' +
+                  'No dots. Do not talk about dots at ALL.',
                 num_beams: 5,
                 max_length: 4000,
                 temperature: 2,
